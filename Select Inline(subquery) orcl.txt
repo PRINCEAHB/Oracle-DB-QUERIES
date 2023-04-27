@@ -1,0 +1,116 @@
+ --S.T IRIS TEST USERS  3310462329905 3610315876515 
+select * from iris_strv.domestic_documents -- DOMESTIC_DOCUMETNS (SALE LEDGER)
+where seller_reg_no ='3610315876515'
+and buyer_reg_no ='3310462329905'
+and doc_tax_period='202207'
+and doc_type_id in('9','10') ;
+
+SELECT * FROM Iris_strv.FORM_PURCHASE_INVOICES -- ANNEXK-A (PURCHASES)
+where BUYER_REG_NO='3610315876515'
+and CASE_STATUS_CODE ='2'
+AND SPLR_TYPE ='1'
+AND DOC_TYPE_ID ='1';
+
+SELECT * FROM 
+    IRIS_STRV.FORM_SALE_INVOICES    -- ANNEXK-C (SALES)
+   WHERE SELLER_REG_NO ='3610315876515'
+      and DOC_NO IN ('101','102')
+    and CASE_STATUS_CODE ='2'
+    --AND DOC_TYPE_ID ='1'
+        ;
+
+SELECT  * FROM
+     IRIS_NEW.WORKFLOW
+     where REGISTRATION_NO='3310462329905'
+       AND CASE_STAGE_CODE = '2'
+       AND CASE_STATUS_CODE= '2'
+                ; 
+
+select * from iris_new.wf_data 
+where TRANSACTION_ID IN (SELECT  TRANSACTION_ID
+    FROM IRIS_NEW.WORKFLOW
+     where  REGISTRATION_NO='3310462329905'
+       --AND TRANSACTION_ID ='1000000902425554'
+       AND CASE_STAGE_CODE = '2'
+       AND CASE_STATUS_CODE= '2'
+       AND AMOUNT_CODE IN ('100101','100201')
+       );
+       
+select * from iris_strv.document_stages 
+WHERE DOC_STAGE_CODE = '2';
+
+SELECT * FROM IRIS_STRV.DOCUMENT_STATUS 
+WHERE DOC_STATUS ='2';   
+
+ select * from iris_new.payments 
+ where REGISTRATION_NO ='3610315876515'
+ --and  TAX_MONTH ='6'
+ --and CPR_NO ='ST2021062900001146803'
+ AND CLAIMED ='1'
+ ;
+ 
+ 
+     SELECT *
+          -- WF.REGISTRATION_NO,WF.TRANSACTION_ID,WF.CASE_STAGE_CODE,
+           --wd.AMOUNT_CODE,wd.col_a , wd.col_b, wd.col_c   
+            FROM IRIS_NEW.wf_data WD
+           JOIN IRIS_NEW.WORKFLOW WF
+           ON WF.TRANSACTION_ID = WD.TRANSACTION_ID
+           AND REGISTRATION_NO IN ( Select SELLER_REG_NO 
+           from iris_strv.domestic_documents DD
+          where DOC_TYPE_ID in (select DOC_TYPE_ID
+          from iris_strv.form_sale_invoices
+          where  DD.seller_reg_no='3610315876515'
+          and DD.DOC_TAX_PERIOD='202205'
+          and WF.CASE_STAGE_CODE  = '2'
+          AND WF.CASE_STATUS_CODE = '2'
+          AND WF.TRANSACTION_ID = '1000000902426017'
+          AND WD.AMOUNT_CODE IN ('100101','100201')
+          ));
+     
+      
+
+  Select * 
+    from iris_strv.domestic_documents 
+  where item_desc_id in (select ITEM_DESC_ID
+  from iris_strv.form_purchase_invoices
+  where DOC_TAX_PERIOD='202205' 
+  and form_id_purchase IN (SELECT FORM_ID
+       FROM IRIS_STRV.FORM_SALE_INVOICES 
+       WHERE SELLER_REG_NO='3310462329905'));
+
+    
+
+
+SELECT 
+            ddoc_id,
+            doc_no, -- Invoice No
+            doc_date, -- Invoice Date
+            TRANSACTION_TYPE_ID, -- sale type id
+            seller_province_id, -- Sale Origination Province of Supplier
+            buyer_province_id, -- Destination of Supply
+            Doc_type_id, -- sale/purchase/debit/credit invoice
+            tax_type_id, -- annexcure category id
+            buyer_reg_no, -- Buyer Registration No / CNIC	
+            buyer_name, -- Buyer Name	
+            buyer_type_id, -- Buyer Taxpayer Type
+            hs_code,-- Hs Code
+            item_desc_id, -- Item Description
+            measurement_code, -- UOM
+            medium_code, -- Online/File/Internal Service/External Service
+            rate_id, -- Rate
+            rate_value,
+            sro_id, -- SRO / Schedule No.
+            sro_item_id, -- Item Sr. No
+            vat_withheld, -- ST withheld at Source
+            qty, -- Quantity
+            vat_amount, --Sales Tax/FED in ST Mode	
+            extra_tax, -- Extra Tax
+            further_tax, -- Further Tax	
+            sale_value -- Sales Tax/FED in ST Mode	
+     FROM IRIS_STRV.domestic_documents 
+     WHERE 
+            medium_code = '2' -- file
+            AND doc_status = '1' -- Pending validation
+            AND case_status_code = '2' -- Active
+            AND inserted_by = '3310462329905';

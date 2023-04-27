@@ -1,0 +1,36 @@
+select count(*) From iris_strv.domestic_documents
+Where TRANSACTION_TYPE_ID not in ( Select TRANSACTION_TYPE_ID From iris_Strv.SA_VAT_TRANSACTION_TYPE_CODE);
+
+select count(*) From iris_strv.domestic_documents
+Where ITEM_DESC_ID not in (Select ITEM_DESC_ID From iris_Strv.SA_VAT_ITEM_DESC_CODE );
+
+select Count(*) From iris_strv.domestic_documents
+Where rate_id not in (Select rate_id From iris_Strv.SA_VAT_RATE_CODE );
+
+select count(*) From iris_strv.domestic_documents
+Where MEASUREMENT_CODE not in (Select UOM_ID From iris_Strv.SA_VAT_UOM );
+
+select count(*) From iris_strv.domestic_documents
+Where SRO_ID not in (Select SRO_ID From iris_Strv.SA_VAT_SRO_CODE );
+
+select Count(*) From iris_strv.domestic_documents
+Where SRO_ITEM_ID not in (Select SRO_ITEM_ID From iris_Strv.SA_VAT_SRO_ITEM_CODE);
+
+select Count(*) From iris_strv.domestic_documents
+Where DOC_STATUS not in (Select DOC_STATUS From iris_Strv.DOCUMENT_STATUS);
+
+select * From iris_strv.domestic_documents
+where doc_type_id not in (Select DOC_TYPE_ID From iris_strv.SA_DOC_TYPES);
+
+select count(*) From iris_strv.domestic_documents
+where SELLER_PROVINCE_ID not in (Select SELLER_PROVINCE_ID From iris_strv.SA_STATES_PROVINCES);
+
+select Count(*) From iris_strv.domestic_documents
+where BUYER_PROVINCE_ID not in (Select BUYER_PROVINCE_ID From iris_strv.SA_STATES_PROVINCES);
+
+select Count(*) From iris_strv.domestic_documents
+where TAX_TYPE_ID not in (Select TAX_TYPE_ID From iris_strv.SA_VAT_ANNEXURE_CODE);
+
+select Count(*) From iris_strv.domestic_documents
+where REASON_ID not in (Select REASON_ID From iris_strv.SA_VAT_REASONS);
+

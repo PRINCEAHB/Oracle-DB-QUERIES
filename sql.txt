@@ -1,0 +1,174 @@
+SET serveroutput ON;
+ BEGIN
+   DBMS_OUTPUT.put_line ('Hello World!');
+END;   
+
+DECLARE
+  l_message VARCHAR2( 255 ) := 'Hello World!';
+BEGIN
+  DBMS_OUTPUT.PUT_LINE( l_message );
+END;
+
+DECLARE
+      v_result NUMBER;
+BEGIN
+   v_result := 1 / 0;
+   EXCEPTION
+      WHEN ZERO_DIVIDE THEN
+         DBMS_OUTPUT.PUT_LINE( SQLERRM );
+END;
+
+    DECLARE
+    l_total_sales NUMBER(15,2);
+    l_credit_limit NUMBER (10,0);    
+    l_contact_name VARCHAR2(255);
+    BEGIN
+       NULL;
+    END;
+    
+ DECLARE
+    l_customer_group VARCHAR2(100) := 'Silver';
+BEGIN
+    l_customer_group := 'Gold';
+    DBMS_OUTPUT.PUT_LINE(l_customer_group);
+END;
+
+DECLARE 
+   l_product_name VARCHAR2(100) DEFAULT 'Laptop';
+BEGIN 
+   NULL; 
+END;
+
+DECLARE
+  l_customer_name customers.name%TYPE;
+  l_credit_limit customers.credit_limit%TYPE;
+BEGIN
+  SELECT
+    name, credit_limit
+  INTO
+    l_customer_name, l_credit_limit
+  FROM
+    customers
+  WHERE
+    customer_id = 38;
+
+  DBMS_OUTPUT.PUT_LINE(l_customer_name || ':' || l_credit_limit );
+END;
+/
+
+DECLARE
+    l_credit_limit   customers.credit_limit%TYPE;
+    l_average_credit l_credit_limit%TYPE;
+    l_max_credit     l_credit_limit%TYPE;
+    l_min_credit     l_credit_limit%TYPE;
+BEGIN
+    -- get credit limits
+    SELECT 
+        MIN(credit_limit), 
+        MAX(credit_limit), 
+        AVG(credit_limit)
+    INTO 
+        l_min_credit,
+        l_max_credit, 
+        l_average_credit
+    FROM customers;
+    
+    
+    SELECT 
+        credit_limit
+    INTO 
+        l_credit_limit
+    FROM 
+        customers
+    WHERE 
+        customer_id = 100;
+
+    -- show the credits     
+    dbms_output.put_line('Min Credit: ' || l_min_credit);
+    dbms_output.put_line('Max Credit: ' || l_max_credit);
+    dbms_output.put_line('Avg Credit: ' || l_average_credit);
+
+    -- show customer credit    
+    dbms_output.put_line('Customer Credit: ' || l_credit_limit);
+END;
+
+DECLARE
+    co_payment_term   CONSTANT NUMBER   := 45; -- days 
+    co_payment_status CONSTANT BOOLEAN  := FALSE; 
+BEGIN
+    NULL;
+END;
+
+DECLARE 
+a NUMBER :=10;
+BEGIN
+dbms_output.put_line('Program started.' );
+IF( a > 100 ) THEN
+dbms_output.put_line('a is greater than 100'); 
+END IF;
+dbms_output.put_line('Program completed.');
+END;
+
+DECLARE 
+a CHAR(1) := 'u';
+BEGIN
+IF UPPER(a) in ('A’,'E','I','0','U' ) THEN 
+dbms_output.put_line(‘The character is in English Vowels');
+END IF;
+END;
+
+  DECLARE
+mark NUMBER :=55;
+BEGIN
+dbms_output.put_line('Program started.' );
+IF( mark >= 70) THEN 
+dbms_output.put_line('Grade A');
+ELSIF(mark >= 40 AND mark < 70) THEN
+dbms_output.put_line('Grade B'); 
+ELSIF(mark >=35 AND mark < 40) THEN
+dbms_output.put_line('Grade C’);
+END IF;
+dbms_output.put_line(‘Program completed.’); 
+END;
+
+DECLARE
+mark NUMBER :=25;
+BEGIN
+dbms_output.put_line(‘Program started.’ );
+IF( mark >= 70) THEN 
+dbms_output.put_line(‘Grade A’); 
+ELSIF(mark >= 40 AND mark < 70) THEN 
+dbms_output.put_line(‘Grade B'); 
+ELSIF(mark >=35 AND mark < 40) THEN 
+dbms_output.put_line(‘Grade C);
+ELSE
+dbms_output.put_line(‘No Grade’);
+END IF;
+dbms_output.put_line(‘Program completed.' ); 
+END;
+
+                       DECLARE 
+                                   a NUMBER :=10; 
+                                   b NUMBER :=15; 
+                                   c NUMBER :=20;
+                      BEGIN
+                         dbms_output.put_line('Program started.' );
+                        IF( a > b)THEN
+     /*Nested-if l */
+	                    dbms_output.put_line('Checking Nested-IF 1'); 
+                         IF( a > c ) THEN
+	                    dbms_output.put_line('A is greatest'); 
+	                  ELSE
+	                    dbms_output.put_line('C is greatest'); 
+	             END IF;
+                  ELSE
+              /*Nested-if2 */
+	        dbms_output.put_line('Checking Nested-IF 2' ); 
+	       IF( b > c ) THEN
+	         dbms_output.put_line('B is greatest' ); 
+	       ELSE
+	         dbms_output.put_line('C is greatest' ); 
+	       END IF;
+           END IF;
+              dbms_output.put_line('Program completed.' );
+           END;

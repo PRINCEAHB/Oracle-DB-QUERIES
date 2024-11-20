@@ -1,0 +1,169 @@
+-- create tables 
+
+create table products (
+    name                           varchar2(50),
+    description                    varchar2(4000),
+    sku                            varchar2(30),
+    unit                           number,
+    unit_price                     number
+);
+create table expenses (
+    the_date                       date,
+    the_desc                       varchar2(4000),
+    type                           varchar2(4000),
+    amount                         varchar2(4000)
+);
+create table customers (
+    first_name                     varchar2(255),
+    last_name                      varchar2(255),
+    email                          varchar2(255),
+    city                           varchar2(255),
+    country                        varchar2(50),
+    gender                         varchar2(30) constraint customers_gender_cc
+                                   check (gender in ('MALE','FEMALE')),
+    date_of_birth                  date,
+    phone                          varchar2(30),
+    postal_code                    varchar2(30)
+);
+create table channels (
+    name                           varchar2(255) constraint channels_name_cc
+                                   check (name in ('DIRECT','ONLINE','PHONE'))
+);
+
+create table promotions (
+    name                           varchar2(255),
+    code                           varchar2(10),
+    date_begin                     date,
+    date_end                       date,
+    discount_percentage            number
+);
+
+create table sales (
+    product_id                     number
+                                   constraint sales_product_id_fk
+                                   references products on delete cascade,
+    customer_id                    number
+                                   constraint sales_customer_id_fk
+                                   references customers on delete cascade,
+    promotion_id                   number
+                                   constraint sales_promotion_id_fk
+                                   references promotions on delete cascade,
+    channel_id                     number
+                                   constraint sales_channel_id_fk
+                                   references channels on delete cascade,
+    date_of_sale                   date,
+    quantity                       number,
+    unit_price                     number
+);
+
+create table history (
+    id                  number primary key,
+    table_name          varchar2(128),
+    column_name         varchar2(128),
+    action              varchar2(1) check (action in ('I','U','D')),
+    action_date         date,
+    action_by           varchar2(255),
+    data_type           varchar2(255),
+    pk1                 number,
+    tab_row_version     integer,
+    old_vc              varchar2(4000),
+    new_vc              varchar2(4000),
+    old_number          number,
+    new_number          number,
+    old_date            date,
+    new_date            date,
+    old_ts              timestamp,
+    new_ts              timestamp,
+    old_tswtz           timestamp with time zone,
+    new_tswtz           timestamp with time zone,
+    old_tswltz          timestamp with local time zone,
+    new_tswltz          timestamp with local time zone,
+    old_clob            clob,
+    new_clob            clob,
+    old_blob            blob,
+    new_blob            blob
+);
+
+create table projects (
+    name                           varchar2(255) not null,
+    owner                          varchar2(4000),
+    created                        date not null,
+    created_by                     varchar2(255) not null,
+    updated                        date not null,
+    updated_by                     varchar2(255) not null
+);
+create table milestones (
+    project_id                     number
+                                   constraint milestones_project_id_fk
+                                   references projects on delete cascade,
+    name                           varchar2(255) not null,
+    status                         varchar2(60) constraint milestones_status_cc
+                                   check (status in ('OPEN','COMPLETED','CLOSED')),
+    owner                          varchar2(4000),
+    started                        date,
+    closed                         date,
+    created                        date not null,
+    created_by                     varchar2(255) not null,
+    updated                        date not null,
+    updated_by                     varchar2(255) not null
+);
+
+create table links (
+    project_id                     number
+                                   constraint links_project_id_fk
+                                   references projects on delete cascade,
+    name                           varchar2(255) not null,
+    url                            varchar2(4000),
+    created                        date not null,
+    created_by                     varchar2(255) not null,
+    updated                        date not null,
+    updated_by                     varchar2(255) not null
+);
+
+create table attachments (
+    project_id                     number
+                                   constraint attachments_project_id_fk
+                                   references projects on delete cascade,
+    contributed_by                 varchar2(4000),
+    attachment                     blob,
+    attachment_filename            varchar2(512),
+    attachment_mimetype            varchar2(512),
+    attachment_charset             varchar2(512),
+    attachment_lastupd             date,
+    created                        date not null,
+    created_by                     varchar2(255) not null,
+    updated                        date not null,
+    updated_by                     varchar2(255) not null
+);
+
+create table action_items (
+    project_id                     number
+                                   constraint action_items_project_id_fk
+                                   references projects on delete cascade,
+    action                         varchar2(4000),
+    the_desc                       clob,
+    owner                          varchar2(4000),
+    status                         varchar2(60) constraint action_items_status_cc
+                                   check (status in ('OPEN','COMPLETED','CLOSED')),
+    created                        date not null,
+    created_by                     varchar2(255) not null,
+    updated                        date not null,
+    updated_by                     varchar2(255) not null
+);
+
+create table departments (
+    name                           varchar2(255) not null,
+    location                       varchar2(4000),
+    country                        varchar2(4000)
+);
+
+create table employees (
+    department_id                  number
+                                   constraint employees_department_id_fk
+                                   references departments on delete cascade,
+    name                           varchar2(50) not null,
+    email                          varchar2(255),
+    cost_center                    number,
+    date_hired                     date,
+    job                            varchar2(255)
+);

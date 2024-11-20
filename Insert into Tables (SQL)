@@ -1,0 +1,95 @@
+INSERT INTO SELECT
+The following SQL statement copies "Suppliers" into "Customers" (fill all columns):
+
+INSERT INTO Customers (CustomerName, ContactName, Address, City, PostalCode, Country)
+SELECT SupplierName, ContactName, Address, City, PostalCode, Country FROM Suppliers;
+
+The following SQL statement copies only the German suppliers into "Customers":
+
+INSERT INTO Customers (CustomerName, City, Country)
+SELECT SupplierName, City, Country FROM Suppliers
+WHERE Country='Germany';
+
+The following SQL goes through conditions and returns a value when the first condition is met:
+
+SELECT OrderID, Quantity,
+CASE
+    WHEN Quantity > 30 THEN 'The quantity is greater than 30'
+    WHEN Quantity = 30 THEN 'The quantity is 30'
+    ELSE 'The quantity is under 30'
+END AS QuantityText
+FROM OrderDetails;
+
+The following SQL statement creates a stored procedure named "SelectAllCustomers" that selects all records from the "Customers" table
+
+CREATE PROCEDURE SelectAllCustomers
+AS
+SELECT * FROM Customers
+GO;
+Execute the stored procedure above as follows:
+EXEC SelectAllCustomers;
+
+The following SQL statement creates a stored procedure that selects Customers from a particular City from the "Customers" table:
+CREATE PROCEDURE SelectAllCustomers @City nvarchar(30)
+AS
+SELECT * FROM Customers WHERE City = @City
+GO;
+
+Execute the stored procedure above as follows:
+
+Example
+EXEC SelectAllCustomers @City = 'London';
+
+Stored Procedure With Multiple Parameters
+Setting up multiple parameters is very easy. Just list each parameter and the data type separated by a comma as shown below.
+
+The following SQL statement creates a stored procedure that selects Customers from a particular City with a particular PostalCode from the "Customers" table:
+
+Example
+CREATE PROCEDURE SelectAllCustomers @City nvarchar(30), @PostalCode nvarchar(10)
+AS
+SELECT * FROM Customers WHERE City = @City AND PostalCode = @PostalCode
+GO;
+Execute the stored procedure above as follows:
+
+Example
+EXEC SelectAllCustomers @City = 'London', @PostalCode = 'WA1 1DP';
+
+
+The following SQL will order the customers by City. However, if City is NULL, then order by Country
+
+SELECT CustomerName, City, Country
+FROM Customers
+ORDER BY
+(CASE
+    WHEN City IS NULL THEN Country
+    ELSE City
+END);
+insert into expenses values(
+25/5/2022, 'Foods item', 'Cash', 2000);
+insert into expenses values(
+26/5/2022, 'Foods item', 'Cash', 500);
+insert into expenses values(
+27/5/2022, 'Foods item', 'Cash', 200);
+insert into expenses values(
+27/5/2022, 'Foods item', 'Cash', 200);
+insert into expenses values(
+26/5/2022, 'Foods item', 'Cash', 600);
+insert into expenses values(
+28/5/2022, 'Foods item', 'Cash', 1300);
+-- insert some values
+INSERT INTO students VALUES (1, 'Ryan', 'M');
+INSERT INTO students VALUES (2, 'Joanna', 'F');
+-- fetch some values
+SELECT * FROM students WHERE gender = 'F';
+
+-- insert some values
+INSERT INTO students VALUES (1, 'hafeez', 'M');
+INSERT INTO students VALUES (2, 'nida', 'F');
+-- fetch some values
+select * from students;
+
+        insert into customers values(1, 'Aalia','Isb', 'Pakistan');
+        insert into customers values(2, 'Aamir','Isb', 'Pakistan');
+        insert into customers values(3, 'Alfreds', 'Berlin','Germany');
+        insert into customers values(4, 'Horn', 'london', 'UK');
